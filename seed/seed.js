@@ -12,17 +12,17 @@ const seedDB = ({ topicData, userData, articleData, commentData }) => {
       ]);
     })
     .then(([topicDocs, userDocs]) => {
-        console.log(topicDocs[0], userDocs[0])
       return Promise.all ([
+        topicDocs,
         userDocs,
         Article.insertMany(formatArticle(articleData, userDocs))
       ])
     })
-    .then(([userDocs, articleDocs]) => {
-        console.log(articleDocs[0])
-      return Comment.insertMany(
-        formatComments(commentData, userDocs, articleDocs)
-      );
+    .then(([topicDocs, userDocs, articleDocs]) => {
+      return Promise.all ([ 
+        topicDocs, userDocs, articleDocs,
+        Comment.insertMany(formatComments(commentData, userDocs, articleDocs))
+      ])
     })
     .catch(err => {
       console.log("Error encountered seeding database: ", err);

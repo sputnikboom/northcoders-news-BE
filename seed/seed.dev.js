@@ -8,8 +8,7 @@ mongoose.connect(DB_URL, {useNewUrlParser: true})
     console.log('Connected to database!!!')
     return seedDB(data);
 })
-.then((comments) => {
-    console.log(comments[0])
+.then(() => {
     console.log('Database seeded!!!')
     mongoose.disconnect();
 })

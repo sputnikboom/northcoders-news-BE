@@ -31,7 +31,7 @@ Data has been provided for both testing and development environments so you will
 1.  You will need to seed the topics and users, followed by the articles and comments. 
 
 * Each article should have a `belongs_to` property, referenced by a topic's `topic_slug`, and have a `created_by` property that references a user's mongo `_id`. 
-* Each comment should also have `created_by` property that references a user's mongo `_id` and should also have a `belongs_to` property that references the specific article's mongo `_id`.
+* Each comment should also have `created_by` property that references a user's mongo` `_id` and should also have a `belongs_to` property that references the specific article's mongo `_id`.
 
 ### Step 2 - Building and Testing
 
@@ -58,7 +58,7 @@ GET /api
 ```http
 GET /api/topics
 # Get all the topics
-```
+```use
 
 ```http
 GET /api/topics/:topic_slug/articles
