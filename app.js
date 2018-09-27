@@ -15,12 +15,17 @@ app.use('/*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    if(err.status === 404) res.status(err.status).send({msg: 'page not found'})
+    if(err.stats === 400) res.status(err.status).send({msg: 'Bad request'})
+    else next(err);
+})
+
+app.use((err, req, res, next) => {
+    if(err.status === 404) res.status(err.status).send({msg: 'Page not found'})
     else next(err);
 });
 
 app.use((err, req, res, next) => {
-    res.status(500).send({msg: 'internal server error'});
+    res.status(500).send({msg: 'Internal server error'});
     console.log('server error encountered: ', err)
 });
 

@@ -82,10 +82,10 @@ GET /api/articles/:article_id
 # Get an individual article
 ``` -->
 
-```http
+<!-- ```http
 GET /api/articles/:article_id/comments
 # Get all the comments for a individual article
-```
+``` -->
 
 ```http
 POST /api/articles/:article_id/comments
@@ -110,11 +110,11 @@ DELETE /api/comments/:comment_id
 # Deletes a comment
 ```
 
-```http
+<!-- ```http
 GET /api/users/:username
 # e.g: `/api/users/mitch123`
 # Returns a JSON object with the profile data for the specified user.
-```
+``` -->
 
 NOTE: When it comes to building your front end you'll find it extremely useful if your POST comment endpoint returns the new comment with the created_by property populated with the corresponding user object.
 
