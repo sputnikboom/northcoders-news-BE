@@ -15,12 +15,12 @@ app.use('/*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    if(err.stats === 400) res.status(err.status).send({msg: 'Bad request'})
+    if(err.stats === 400 || err.name === "CastError") res.status(400).send({msg: 'Bad request'})
     else next(err);
 })
 
 app.use((err, req, res, next) => {
-    if(err.status === 404) res.status(err.status).send({msg: 'Page not found'})
+    if(err.status === 404) res.status(404).send({msg: 'Page not found'})
     else next(err);
 });
 

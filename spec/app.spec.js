@@ -54,16 +54,14 @@ describe("/api", function() {
           });
       });
     });
-    describe("/non_existant_topic_slug/articles", () => {
-      it("GET responds with status 404 and msg 'Page not found'", () => {
-        return request
-        .get('/api/invalid_topic/articles')
+    it("GET responds with status 404 and msg 'Page not found'", () => {
+      return request
+        .get("/api/invalid_topic/articles")
         .expect(404)
-        .then(({body: {msg}}) => {
-          expect(msg).to.equal('Page not found');
-        })
-      })
-    })
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Page not found");
+        });
+    });
   });
 
   describe("/articles", () => {
@@ -97,7 +95,24 @@ describe("/api", function() {
             expect(article._id).to.equal(`${articleDocs[0]._id}`);
           });
       });
+      it("GET responds with status 404 and a msg 'Page not found' when ID is valid but not found", () => {
+        return request
+          .get(`/api/articles/${userDocs[0]._id}`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Page not found");
+          });
+      });
+      it("GET responds with status 400 and msg 'Bad Request' when given an invalid ID", () => {
+        return request
+          .get("/api/articles/blinky")
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Bad request");
+          });
+      });
     });
+
     describe("/:article_id/comments", () => {
       it("GET responds with status 200 and all the the comments for a given article", () => {
         return request
@@ -108,6 +123,22 @@ describe("/api", function() {
             expect(comments[0]._id).to.equal(`${commentDocs[0]._id}`);
           });
       });
+      it("GET responds with status 404 and message 'Page not found' when the article id doesn't exist", () => {
+        return request
+          .get(`/api/articles/${commentDocs[0]._id}/comments`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Page not found");
+          });
+      });
+    });
+    it("GET responds with status 400 and message 'Bad Request' when the article id is not valid", () => {
+      return request
+        .get("/api/articles/blinky/comments")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Bad request");
+        });
     });
   });
 
@@ -122,6 +153,14 @@ describe("/api", function() {
             expect(user).to.be.an("object");
           });
       });
+      it("GET responds with status 404 and msg 'page not found' when given a non-existent username", () => {
+        return request
+        .get("/api/users/blinky")
+        .expect(404)
+        .then(({body: {msg}}) => {
+          expect(msg).to.equal("Page not found");
+        })
+      })
     });
   });
 });
