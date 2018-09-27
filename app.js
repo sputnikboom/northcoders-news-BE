@@ -5,7 +5,7 @@ const apiRouter = require('./routers/api-router');
 
 mongoose.connect(DB_URL, {useNewUrlParser: true})
 .then(() => {
-    console.log('Database connected.....')
+    console.log(`Database ${DB_URL} connected.....`)
 })
 
 app.use('/api', apiRouter);

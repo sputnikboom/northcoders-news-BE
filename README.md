@@ -55,16 +55,16 @@ GET /api
 # Serves an HTML page with documentation for all the available endpoints
 ```
 
-```http
+<!-- ```http
 GET /api/topics
 # Get all the topics
-```use
-
+```use -->
+<!-- 
 ```http
-GET /api/topics/:topic_slug/articles
+GET /api/topics/:topic_slug/articles 
 # Return all the articles for a certain topic
 # e.g: `/api/topics/football/articles`
-```
+``` -->
 
 ```http
 POST /api/topics/:topic_slug/articles
@@ -72,15 +72,15 @@ POST /api/topics/:topic_slug/articles
 # e.g: `{ "title": "new article", "body": "This is my new article content", "created_by": "user_id goes here"}`
 ```
 
-```http
+<!-- ```http
 GET /api/articles
 # Returns all the articles
-```
+``` -->
 
-```http
+<!-- ```http
 GET /api/articles/:article_id
 # Get an individual article
-```
+``` -->
 
 ```http
 GET /api/articles/:article_id/comments

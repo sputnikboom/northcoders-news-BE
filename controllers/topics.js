@@ -11,7 +11,6 @@ const getAllTopics = (req, res, next) => {
 };
 
 const getTopicArticles = (req, res, next) => {
-    console.log(req.params)
   Article.find({ belongs_to: req.params.topic_slug })
     .then(articles => {
       res.send({ articles });
