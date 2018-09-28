@@ -17,4 +17,20 @@ const getArticleById = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getAllArticles, getArticleById };
+const updateVote = (req, res, next) => {
+  if(req.query.vote !== "up" && req.query.vote !== "down") throw {status: 400};
+
+  const voteObj = (req.query.vote === "up") ? {votes: +1} : {votes : -1};
+  return Article.findByIdAndUpdate(
+    req.params.article_id,
+    { $inc: voteObj },
+    { new: true }
+  )
+    .populate("created_by")
+    .then(updatedDoc => {
+      res.send(updatedDoc);
+    })
+    .catch(next);
+};
+
+module.exports = { getAllArticles, getArticleById, updateVote };

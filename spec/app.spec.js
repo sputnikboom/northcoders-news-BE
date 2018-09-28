@@ -15,7 +15,7 @@ describe("/api", function() {
   * we gotta use a ye olde function
   */
 
-  this.timeout(5000);
+  this.timeout(6000);
 
   let topicDocs, userDocs, articleDocs, commentDocs;
 
@@ -111,6 +111,22 @@ describe("/api", function() {
             expect(msg).to.equal("Bad request");
           });
       });
+      it("PATCH with query up responds with status 200, and an object containing the update article", () => {
+        return request
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=up`)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.votes).to.equal(articleDocs[0].votes + 1);
+          });
+      });
+      it("PATCH with query down responds with status 200 and the updated article", () => {
+        return request
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=down`)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.votes).to.equal(articleDocs[0].votes - 1);
+          });
+      });
     });
 
     describe("/:article_id/comments", () => {
@@ -155,12 +171,32 @@ describe("/api", function() {
       });
       it("GET responds with status 404 and msg 'page not found' when given a non-existent username", () => {
         return request
-        .get("/api/users/blinky")
-        .expect(404)
-        .then(({body: {msg}}) => {
-          expect(msg).to.equal("Page not found");
-        })
-      })
+          .get("/api/users/blinky")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Page not found");
+          });
+      });
+    });
+  });
+  describe("/comments", () => {
+    describe.only("/comments/:comment_id", () => {
+      it("PATCH responds with status 200 and an object containing the updated document when voted up", () => {
+        return request
+          .patch(`/api/comments/${commentDocs[0]._id}?vote=up`)
+          .expect(200)
+          .then(({body}) => {
+            expect(body.votes).to.equal(commentDocs[0].votes + 1);
+          });
+      });
+      it("PATCH responds with status 200 and an object containing the updated document when voted down", () => {
+        return request
+          .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
+          .expect(200)
+          .then(({body}) => {
+            expect(body.votes).to.equal(commentDocs[0].votes - 1);
+          });
+      });
     });
   });
 });

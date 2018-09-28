@@ -92,18 +92,18 @@ POST /api/articles/:article_id/comments
 # Add a new comment to an article. This route requires a JSON body with body and created_by key value pairs
 # e.g: `{"body": "This is my new comment", "created_by": "user_id goes here"}`
 ```
-
+<!--
 ```http
 PATCH /api/articles/:article_id
 # Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'
 # e.g: `/api/articles/:article_id?vote=up`
-```
+``` -->
 
-```http
+<!-- ```http
 PATCH /api/comments/:comment_id
 # Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'
 # e.g: `/api/comments/:comment_id?vote=down`
-```
+``` -->
 
 ```http
 DELETE /api/comments/:comment_id

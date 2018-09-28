@@ -2,11 +2,14 @@ const app = require('express')();
 const mongoose = require('mongoose');
 const {DB_URL} = require('./config');
 const apiRouter = require('./routers/api-router');
+const bodyParser = require('body-parser');
 
 mongoose.connect(DB_URL, {useNewUrlParser: true})
 .then(() => {
     console.log(`Database ${DB_URL} connected.....`)
 })
+
+app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
