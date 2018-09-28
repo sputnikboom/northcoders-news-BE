@@ -38,4 +38,12 @@ const addNewComment = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getCommentsByArticle, updateCommentVote, addNewComment };
+const removeComment = (req, res, next) => {
+  Comment.findByIdAndRemove(req.params.comment_id)
+  .then(removedComment => {
+    res.send(removedComment)
+  })
+  .catch(next)
+} 
+
+module.exports = { getCommentsByArticle, updateCommentVote, addNewComment, removeComment };

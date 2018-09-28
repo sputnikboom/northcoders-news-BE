@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const seedDB = require("../seed/seed.js");
 const data = require("../seed/testData");
 
+// TODO: error handling for PATCH, POST, DELETE
+
 describe("/api", function() {
   /*
   * this.timeout(5000);
@@ -188,7 +190,8 @@ describe("/api", function() {
         .send(newComment)
         .expect(201)
         .then(({ body }) => {
-          console.log(body);
+          expect(body.created_by).to.equal(`${userDocs[0]._id}`);
+          expect(body.belongs_to).to.equal(`${articleDocs[0]._id}`);
         });
     });
   });
@@ -224,7 +227,6 @@ describe("/api", function() {
             expect(body.votes).to.equal(commentDocs[0].votes + 1);
           });
       });
-      // error handling for invalid vote requests???
       it("PATCH responds with status 200 and an object containing the updated document when voted down", () => {
         return request
           .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
@@ -233,6 +235,21 @@ describe("/api", function() {
             expect(body.votes).to.equal(commentDocs[0].votes - 1);
           });
       });
+    });
+    it.only("DELETE responds with status 200, and an object containing the removed comment", () => {
+      return request
+        .delete(`/api/comments/${commentDocs[0]._id}`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body._id).to.equal(`${commentDocs[0]._id}`);
+        })
+        .then(() => {
+          return request.get(`/api/comments/${commentDocs[0]._id}`)
+          .expect(404)
+            .then(({body: {msg}}) => {
+              expect(msg).to.equal("Page not found");
+            })
+        });
     });
   });
 });
