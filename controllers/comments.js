@@ -29,4 +29,13 @@ const updateCommentVote = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getCommentsByArticle, updateCommentVote };
+const addNewComment = (req, res, next) => {
+  const newComment = Comment({...req.body, belongs_to: req.params.article_id });
+  newComment.save()
+    .then(newCommentDoc => {
+      res.status(201).send(newCommentDoc);
+    })
+    .catch(next);
+};
+
+module.exports = { getCommentsByArticle, updateCommentVote, addNewComment };

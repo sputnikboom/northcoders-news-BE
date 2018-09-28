@@ -53,13 +53,35 @@ describe("/api", function() {
             expect(articles[0].belongs_to).to.equal(articleDocs[0].belongs_to);
           });
       });
+      it("GET responds with status 404 and msg 'Page not found'", () => {
+        return request
+          .get("/api/invalid_topic/articles")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Page not found");
+          });
+      });
     });
-    it("GET responds with status 404 and msg 'Page not found'", () => {
+    it("POST responds with status 201 and an object containing the new document", () => {
+      const newArticle = {
+        title: "how to add a new document to mongo",
+        created_by: `${userDocs[0]._id}`,
+        body: "like this, yo"
+      };
       return request
-        .get("/api/invalid_topic/articles")
-        .expect(404)
-        .then(({ body: { msg } }) => {
-          expect(msg).to.equal("Page not found");
+        .post(`/api/topics/${topicDocs[0].slug}/articles`)
+        .send(newArticle)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body).to.contain.keys(
+            "title",
+            "belongs_to",
+            "created_by",
+            "body",
+            "votes",
+            "created_at"
+          );
+          expect(body.title).to.equal(newArticle.title);
         });
     });
   });
@@ -156,6 +178,19 @@ describe("/api", function() {
           expect(msg).to.equal("Bad request");
         });
     });
+    it("POST responds with status 201 and an object containing the new comment", () => {
+      const newComment = {
+        body: "enough about this, let's talk about goldfish",
+        created_by: `${userDocs[0]._id}`
+      };
+      return request
+        .post(`/api/articles/${articleDocs[0]._id}/comments`)
+        .send(newComment)
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body);
+        });
+    });
   });
 
   describe("/users", () => {
@@ -180,20 +215,21 @@ describe("/api", function() {
     });
   });
   describe("/comments", () => {
-    describe.only("/comments/:comment_id", () => {
+    describe("/comments/:comment_id", () => {
       it("PATCH responds with status 200 and an object containing the updated document when voted up", () => {
         return request
           .patch(`/api/comments/${commentDocs[0]._id}?vote=up`)
           .expect(200)
-          .then(({body}) => {
+          .then(({ body }) => {
             expect(body.votes).to.equal(commentDocs[0].votes + 1);
           });
       });
+      // error handling for invalid vote requests???
       it("PATCH responds with status 200 and an object containing the updated document when voted down", () => {
         return request
           .patch(`/api/comments/${commentDocs[0]._id}?vote=down`)
           .expect(200)
-          .then(({body}) => {
+          .then(({ body }) => {
             expect(body.votes).to.equal(commentDocs[0].votes - 1);
           });
       });
