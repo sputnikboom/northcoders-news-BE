@@ -23,4 +23,12 @@ const formatComments = (commentData, userDocs, articleDocs) => {
   });
 };
 
-module.exports = { formatArticle, formatComments };
+const getCommentCount = (article) => {
+  return Comment.count({belongs_to: article._id})
+  .then(commentCount => {
+    article.comment_count = commentCount;
+    return article
+  })
+}
+
+module.exports = { formatArticle, formatComments, getCommentCount };

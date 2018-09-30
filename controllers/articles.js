@@ -1,9 +1,24 @@
-const { Article } = require("../models");
+const { Article, Comment } = require("../models");
+const {getCommentCount} = require("../utils")
 
 const getAllArticles = (req, res, next) => {
   Article.find()
+    .lean()
     .populate("created_by")
-    .then(articles => res.send({ articles }))
+    .then(articleDocs => {
+      return Promise.all([articleDocs, Comment.find()]);
+    })
+    .then(([articleDocs, commentCounts]) => {
+      const articles = articleDocs.map(article => {
+        return {
+          ...article,
+          comment_count: commentCounts.filter(
+            comment => comment.belongs_to == `${article._id}`
+          ).length
+        };
+      });
+      res.status(200).send({ articles });
+    })
     .catch(next);
 };
 
@@ -16,18 +31,26 @@ const getArticlesByTopic = (req, res, next) => {
 const getArticleById = (req, res, next) => {
   Article.findById(req.params.article_id)
     .populate("created_by")
-    .then(article => {
-      if (!article) throw { status: 404 };
+    .lean()
+    .then(articleDoc => {
+      if (!articleDoc) throw { status: 404 };
+      else
+        return getCommentCount(articleDoc)
+    })
+    .then(([article, comments]) => {
+      article.comment_count = comments.length;
       res.send({ article });
     })
     .catch(next);
 };
 
 const updateVote = (req, res, next) => {
-  if (req.query.vote !== "up" && req.query.vote !== "down")
-    throw { status: 400 };
-
-  const voteObj = req.query.vote === "up" ? { votes: +1 } : { votes: -1 };
+  const voteObj =
+    req.query.vote === "up"
+      ? { votes: +1 }
+      : req.query.vote === "down"
+        ? { votes: -1 }
+        : null;
   return Article.findByIdAndUpdate(
     req.params.article_id,
     { $inc: voteObj },
@@ -35,18 +58,25 @@ const updateVote = (req, res, next) => {
   )
     .populate("created_by")
     .then(updatedDoc => {
+      
       res.send(updatedDoc);
     })
     .catch(next);
 };
 
 const addNewArticle = (req, res, next) => {
-  const newArticle = Article({...req.body, belongs_to: req.params.topic_slug})
-  newArticle.save()
-  .then(newArticleDoc =>{
-    res.status(201).send(newArticleDoc);
-  })
-  .catch(next);
+  const newArticle = Article({
+    ...req.body,
+    belongs_to: req.params.topic_slug
+  }).populate("created_by");
+  newArticle
+    .save()
+    .then(newArticleDoc => newArticleDoc.toObject())
+    .then(updatedDoc => {
+      updatedDoc.comment_count = 0;
+      res.status(201).send(updatedDoc);
+    })
+    .catch(next);
 };
 
 module.exports = {

@@ -64,7 +64,7 @@ describe("/api", function() {
           });
       });
     });
-    it("POST responds with status 201 and an object containing the new document", () => {
+    it.only("POST responds with status 201 and an object containing the new document", () => {
       const newArticle = {
         title: "how to add a new document to mongo",
         created_by: `${userDocs[0]._id}`,
@@ -81,9 +81,11 @@ describe("/api", function() {
             "created_by",
             "body",
             "votes",
-            "created_at"
+            "created_at",
+            "comment_count"
           );
           expect(body.title).to.equal(newArticle.title);
+          expect(body.comment_count).to.equal(0);
         });
     });
   });
@@ -102,8 +104,10 @@ describe("/api", function() {
               "votes",
               "created_at",
               "belongs_to",
-              "created_by"
+              "created_by",
+              "comment_count"
             );
+            console.log(articles);
             expect(articles[0].body).to.equal(articleDocs[0].body);
           });
       });
@@ -145,10 +149,34 @@ describe("/api", function() {
       });
       it("PATCH with query down responds with status 200 and the updated article", () => {
         return request
-          .patch(`/api/articles/${articleDocs[0]._id}?vote=down`)
+          .patch(`/api/articles/5bae174d5a395d5d4ee4404d?vote=down`)
           .expect(200)
           .then(({ body }) => {
             expect(body.votes).to.equal(articleDocs[0].votes - 1);
+          });
+      });
+      it("PATCH to an invalid article id responds with 400 and message 'Bad request", () => {
+        return request
+          .patch(`/api/articles/beep?vote=up`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Bad request");
+          });
+      });
+      it("PATCH with an article id that cannot be found responds with 404 and message 'Page not found'", () => {
+        return request
+          .patch(`/api/articles/${commentDocs[0]._id + 1}?vote=up`)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Page not found");
+          });
+      });
+      it("PATCH with invalid query responds with 400 and message 'Bad request'", () => {
+        return request
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=blinky`)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("Bad request");
           });
       });
     });
@@ -236,7 +264,7 @@ describe("/api", function() {
           });
       });
     });
-    it.only("DELETE responds with status 200, and an object containing the removed comment", () => {
+    it("DELETE responds with status 200, and an object containing the removed comment", () => {
       return request
         .delete(`/api/comments/${commentDocs[0]._id}`)
         .expect(200)
@@ -244,11 +272,12 @@ describe("/api", function() {
           expect(body._id).to.equal(`${commentDocs[0]._id}`);
         })
         .then(() => {
-          return request.get(`/api/comments/${commentDocs[0]._id}`)
-          .expect(404)
-            .then(({body: {msg}}) => {
+          return request
+            .get(`/api/comments/${commentDocs[0]._id}`)
+            .expect(404)
+            .then(({ body: { msg } }) => {
               expect(msg).to.equal("Page not found");
-            })
+            });
         });
     });
   });

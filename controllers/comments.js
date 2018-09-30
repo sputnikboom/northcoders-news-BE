@@ -30,8 +30,14 @@ const updateCommentVote = (req, res, next) => {
 };
 
 const addNewComment = (req, res, next) => {
-  const newComment = Comment({...req.body, belongs_to: req.params.article_id });
-  newComment.save()
+  const newComment = Comment({
+    ...req.body,
+    belongs_to: req.params.article_id
+  })
+  .populate("created_by")
+  .populate("belongs_to")
+  newComment
+    .save()
     .then(newCommentDoc => {
       res.status(201).send(newCommentDoc);
     })
@@ -40,10 +46,15 @@ const addNewComment = (req, res, next) => {
 
 const removeComment = (req, res, next) => {
   Comment.findByIdAndRemove(req.params.comment_id)
-  .then(removedComment => {
-    res.send(removedComment)
-  })
-  .catch(next)
-} 
+    .then(removedComment => {
+      res.send(removedComment);
+    })
+    .catch(next);
+};
 
-module.exports = { getCommentsByArticle, updateCommentVote, addNewComment, removeComment };
+module.exports = {
+  getCommentsByArticle,
+  updateCommentVote,
+  addNewComment,
+  removeComment
+};
