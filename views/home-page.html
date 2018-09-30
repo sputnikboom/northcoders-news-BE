@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home Page</title>
+</head>
+
+<body>
+    <h3>Api endpoints</h3>
+
+    <p>GET /api -- returns this home page
+        <br> GET /api/topics -- returns all topics
+        <br> GET /api/topics/:topic_slug/articles -- returns all articles for a specific topic
+        <br> POST /api/topics/:topic_slug/articles -- adds a new article to a topic. Reuqires a JSON body with title and
+        body keys.
+        <br> GET /api/articles -- returns all articles
+        <br> GET /api/articles/:article_id -- returns a specific article
+        <br> PATCH /api/articles/:article_id -- increments or decrements the votes of an article by one. Required a vote
+        query or "up" or "down"
+        <br> GET /api/articles/:article_id/comments -- returns all of the comments for a specific article
+        <br> POST /api/articles/:article_id/comments -- adds a new article to a comment. Requires a JSON body with body and
+        created_by keys.
+        <br> PATCH /api/comments/:comment_id -- increments or decrements the votes of a comment by one. Required a vote query
+        of "up" or "down"
+        <br> DELETE /api/comments/:comment_id -- deletes a specific comment
+        <br> GET/api/users/:username -- returns the profile data for a specific user
+    </p>
+</body>
+
+</html>
