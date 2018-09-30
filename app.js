@@ -13,10 +13,6 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
-app.use('/', (req, res, next) => {
-    res.sendFile(`${__dirname}/views/home-page.html`)
-})
-
 app.use('/*', (req, res, next) => {
     next({status:404});
 });
