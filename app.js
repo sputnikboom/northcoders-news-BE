@@ -11,7 +11,7 @@ mongoose.connect(DB_URL, {useNewUrlParser: true})
 })
 
 app.use(bodyParser.json());
-app.use(cors);
+app.use(cors());
 app.use('/api', apiRouter);
 
 app.get("/", (req, res, next) =>
