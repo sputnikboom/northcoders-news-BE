@@ -64,7 +64,7 @@ describe("/api", function() {
           });
       });
     });
-    it.only("POST responds with status 201 and an object containing the new document", () => {
+    it("POST responds with status 201 and an object containing the new document", () => {
       const newArticle = {
         title: "how to add a new document to mongo",
         created_by: `${userDocs[0]._id}`,
@@ -90,7 +90,7 @@ describe("/api", function() {
     });
   });
 
-  describe("/articles", () => {
+  describe.only("/articles", () => {
     describe("/", () => {
       it("GET responds with status 200 and an object containing all articles", () => {
         return request
@@ -107,14 +107,13 @@ describe("/api", function() {
               "created_by",
               "comment_count"
             );
-            console.log(articles);
             expect(articles[0].body).to.equal(articleDocs[0].body);
           });
       });
     });
 
     describe("/:article_id", () => {
-      it("GET responds with status 200 and an object containing a specific article", () => {
+      it.only("GET responds with status 200 and an object containing a specific article", () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}`)
           .expect(200)

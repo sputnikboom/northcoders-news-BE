@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Before starting, you should endure the following are installed:
+Before starting, you should ensure the following are installed:
 
 [Node v8.12](https://nodejs.org)
 
@@ -32,10 +32,6 @@ For this project, you will also require the following dependencies:
 ```
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
 
 1. Fork and clone this repository onto your own local machine.
 
@@ -107,10 +103,8 @@ $ NODE_ENV=production node seed/seed.dev.js
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License
 
 ## Acknowledgments
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
+- Many thanks to the fantastic tutors at Northcoders
