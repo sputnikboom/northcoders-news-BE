@@ -34,12 +34,13 @@ const addNewComment = (req, res, next) => {
     ...req.body,
     belongs_to: req.params.article_id
   })
-  .populate("created_by")
-  .populate("belongs_to")
-  newComment
-    .save()
+
+    newComment.save()
     .then(newCommentDoc => {
-      res.status(201).send(newCommentDoc);
+      return Comment.findById(newCommentDoc._id).populate("created_by").populate("belongs_to")
+    })
+    .then(commentDoc => {
+      res.status(201).send(commentDoc);
     })
     .catch(next);
 };
