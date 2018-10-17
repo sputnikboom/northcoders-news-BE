@@ -66,7 +66,6 @@ const updateVote = (req, res, next) => {
     .populate("created_by")
     .lean()
     .then(updatedDoc => {
-      console.log(updatedDoc);
       if (!updatedDoc) throw { status: 404 };
       else return getCommentCount(updatedDoc);
     })
