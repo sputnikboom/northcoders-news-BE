@@ -113,7 +113,7 @@ describe("/api", function() {
     });
 
     describe("/:article_id", () => {
-      it.only("GET responds with status 200 and an object containing a specific article", () => {
+      it("GET responds with status 200 and an object containing a specific article", () => {
         return request
           .get(`/api/articles/${articleDocs[0]._id}`)
           .expect(200)

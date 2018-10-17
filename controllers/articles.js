@@ -1,5 +1,5 @@
 const { Article, Comment } = require("../models");
-const {getCommentCount} = require("../utils")
+const { getCommentCount } = require("../utils");
 
 const getAllArticles = (req, res, next) => {
   Article.find()
@@ -24,7 +24,22 @@ const getAllArticles = (req, res, next) => {
 
 const getArticlesByTopic = (req, res, next) => {
   Article.find({ belongs_to: req.params.topic_slug })
-    .then(articles => res.send({ articles }))
+    .lean()
+    .populate("created_by")
+    .then(articleDocs => {
+      return Promise.all([articleDocs, Comment.find()]);
+    })
+    .then(([articleDocs, comments]) => {
+      const articles = articleDocs.map(article => {
+        return {
+          ...article,
+          comment_count: comments.filter(
+            comment => comment.belongs_to == `${article._id}`
+          ).length
+        };
+      });
+      res.status(200).send({ articles });
+    })
     .catch(next);
 };
 
@@ -34,13 +49,9 @@ const getArticleById = (req, res, next) => {
     .lean()
     .then(articleDoc => {
       if (!articleDoc) throw { status: 404 };
-      else
-        return getCommentCount(articleDoc)
+      else return getCommentCount(articleDoc);
     })
-    .then(([article, comments]) => {
-      article.comment_count = comments.length;
-      res.send({ article });
-    })
+    .then(article => res.status(200).send({ article }))
     .catch(next);
 };
 
@@ -58,7 +69,6 @@ const updateVote = (req, res, next) => {
   )
     .populate("created_by")
     .then(updatedDoc => {
-      
       res.send(updatedDoc);
     })
     .catch(next);
