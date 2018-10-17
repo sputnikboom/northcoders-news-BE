@@ -80,7 +80,11 @@ const addNewArticle = (req, res, next) => {
   }).populate("created_by");
   newArticle
     .save()
-    .then(newArticleDoc => newArticleDoc.toObject())
+    .then(newArticleDoc => {
+      return Article.findById(
+        newArticleDoc._id
+      ).lean().populate("created_by")
+    })
     .then(updatedDoc => {
       updatedDoc.comment_count = 0;
       res.status(201).send(updatedDoc);
