@@ -3,8 +3,8 @@ const { getCommentCount } = require("../utils");
 
 const getAllArticles = (req, res, next) => {
   Article.find()
-    .lean()
     .populate("created_by")
+    .lean()
     .then(articleDocs => {
       return Promise.all([articleDocs, Comment.find()]);
     })
@@ -56,21 +56,21 @@ const getArticleById = (req, res, next) => {
 };
 
 const updateVote = (req, res, next) => {
-  const voteObj =
-    req.query.vote === "up"
-      ? { votes: +1 }
-      : req.query.vote === "down"
-        ? { votes: -1 }
-        : null;
+  
+  const voteObj = (req.query.vote === "up") ? { votes: +1 } : { votes: -1 };
   return Article.findByIdAndUpdate(
     req.params.article_id,
     { $inc: voteObj },
     { new: true }
   )
     .populate("created_by")
+    .lean()
     .then(updatedDoc => {
-      res.send(updatedDoc);
+      console.log(updatedDoc);
+      if (!updatedDoc) throw { status: 404 };
+      else return getCommentCount(updatedDoc);
     })
+    .then(article => res.status(200).send(article))
     .catch(next);
 };
 

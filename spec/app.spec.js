@@ -90,7 +90,7 @@ describe("/api", function() {
     });
   });
 
-  describe.only("/articles", () => {
+  describe("/articles", () => {
     describe("/", () => {
       it("GET responds with status 200 and an object containing all articles", () => {
         return request
@@ -148,7 +148,7 @@ describe("/api", function() {
       });
       it("PATCH with query down responds with status 200 and the updated article", () => {
         return request
-          .patch(`/api/articles/5bae174d5a395d5d4ee4404d?vote=down`)
+          .patch(`/api/articles/${articleDocs[0]._id}?vote=down`)
           .expect(200)
           .then(({ body }) => {
             expect(body.votes).to.equal(articleDocs[0].votes - 1);
@@ -164,7 +164,7 @@ describe("/api", function() {
       });
       it("PATCH with an article id that cannot be found responds with 404 and message 'Page not found'", () => {
         return request
-          .patch(`/api/articles/${commentDocs[0]._id + 1}?vote=up`)
+          .patch(`/api/articles/${commentDocs[0]._id}?vote=up`)
           .expect(404)
           .then(({ body: { msg } }) => {
             expect(msg).to.equal("Page not found");
