@@ -106,8 +106,6 @@ To set up the project for deployment, you'll need to:
 $ NODE_ENV=production node seed/seed.dev.js
 ```
 
-3. 
-
 ## Authors
 
 - **Rachael Hall** - [sputnikboom](https://github.com/sputnikboom)
