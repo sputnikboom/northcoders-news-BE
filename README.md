@@ -2,7 +2,7 @@
 
 A simple news aggregator that allows users to search for and comment on stories related to topics they are interested in.
 
-A live version can be viewed at: nc-news-rachael.herokuapp.com/
+A live version can be viewed at: [nc-news-rachael.herokuapp.com/](nc-news-rachael.herokuapp.com/)
 
 ## Getting Started
 
@@ -54,15 +54,19 @@ $ touch config.js
 const NODE_ENV = process.env.NODE_ENV || "development";
 
 const config = {
-  test: { DB_URL: "mongodb://localhost:27017/<test _database_name" },
+  test: { DB_URL: "mongodb://localhost:27017/<test _database_name>" },
   development: { DB_URL: "mongodb://localhost:27017/<database_name>" }
 };
 
 module.exports = config[NODE_ENV];
 ```
 
-5. To seed the development database, you can use the provided script:
+5. Before seeding the database you first need to make sure that mongo is open and running:
+```
+$ mongod
+```
 
+6. To seed the development database, you can use the following::
 ```
 $ npm run seed:dev
 ```
@@ -75,17 +79,22 @@ You can run the provided tests with the following script:
 $ npm test
 ```
 
+The test database will automatically re-seed after every test, so you don't need to worry about doing this manually. How handy!
+
+
 ## Deployment
 
 The live version of this app was deployed using:
 
 [mLab](https://mlab.com)
+to host the database
 
-[heroku](https://heroku.com)
+[Heroku](https://heroku.com)
+to host the api
 
 To set up the project for deployment, you'll need to:
 
-1. Add the URI for your mLab database to your config file.
+1. Add the URI for your mLab database to your config file. Keep note of this, as you'll need to add it as a config var if hosting on he
 
 ```
   production: {DB_URL: "mongodb://<db_username>:<db_password>@ds115543.mlab.com:15543/<db_name>"}
@@ -96,6 +105,8 @@ To set up the project for deployment, you'll need to:
 ```
 $ NODE_ENV=production node seed/seed.dev.js
 ```
+
+3. 
 
 ## Authors
 
@@ -108,3 +119,4 @@ This project is licensed under the MIT License
 ## Acknowledgments
 
 - Many thanks to the fantastic tutors at Northcoders
+- And especially to [Tom](https://github.com/tomosim)

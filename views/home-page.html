@@ -11,23 +11,29 @@
 <body>
     <h3>Api endpoints</h3>
 
-    <p>GET /api -- returns this home page
-        <br> GET /api/topics -- returns all topics
-        <br> GET /api/topics/:topic_slug/articles -- returns all articles for a specific topic
-        <br> POST /api/topics/:topic_slug/articles -- adds a new article to a topic. Reuqires a JSON body with title and
-        body keys.
-        <br> GET /api/articles -- returns all articles
-        <br> GET /api/articles/:article_id -- returns a specific article
-        <br> PATCH /api/articles/:article_id -- increments or decrements the votes of an article by one. Required a vote
-        query or "up" or "down"
-        <br> GET /api/articles/:article_id/comments -- returns all of the comments for a specific article
-        <br> POST /api/articles/:article_id/comments -- adds a new article to a comment. Requires a JSON body with body and
-        created_by keys.
-        <br> PATCH /api/comments/:comment_id -- increments or decrements the votes of a comment by one. Required a vote query
-        of "up" or "down"
-        <br> DELETE /api/comments/:comment_id -- deletes a specific comment
-        <br> GET/api/users/:username -- returns the profile data for a specific user
-    </p>
+    <ul>
+        <li>GET /api -- returns this home page.
+        </li>
+        <br>
+        <li> GET /api/topics -- returns all topics. </li>
+        <li> GET /api/topics/:topic_slug/articles -- returns all articles for a specific topic.</li>
+        <li> POST /api/topics/:topic_slug/articles -- adds a new article to a topic. Requires a JSON object containing both
+            'title' and 'body' keys.</li>
+        <br>
+        <li> GET /api/articles -- returns all articles.</li>
+        <li> GET /api/articles/:article_id -- returns a specific article.</li>
+        <li> PATCH /api/articles/:article_id -- increments or decrements the vote score of an article by one. Requires a
+            vote query of either 'up' or 'down'.</li>
+        <li> GET /api/articles/:article_id/comments -- returns all of the comments for a specific article.</li>
+        <li> POST /api/articles/:article_id/comments -- adds a new article to a comment. Requires a JSON object contain 'body'
+            and 'created_by' keys.</li>
+        <br>
+        <li> PATCH /api/comments/:comment_id -- increments or decrements the votes of a comment by one. Required a vote query
+            of "up" or "down".</li>
+        <li> DELETE /api/comments/:comment_id -- deletes a specific comment.</li>
+        <br>
+        <li> GET /api/users/:username -- returns the profile data for a specific user.</li>
+    </ul>
 </body>
 
 </html>
