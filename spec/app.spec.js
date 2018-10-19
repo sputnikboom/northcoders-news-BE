@@ -1,4 +1,3 @@
-// this gotta go at the top so ur env is set before anything else!!!!!
 process.env.NODE_ENV = "test";
 
 const app = require("../app");
@@ -8,15 +7,7 @@ const mongoose = require("mongoose");
 const seedDB = require("../seed/seed.js");
 const data = require("../seed/testData");
 
-// TODO: error handling for PATCH, POST, DELETE
-
 describe("/api", function() {
-  /*
-  * this.timeout(5000);
-  * if we use this, can't then use arrow functions
-  * we gotta use a ye olde function
-  */
-
   this.timeout(6000);
 
   let topicDocs, userDocs, articleDocs, commentDocs;
@@ -170,14 +161,6 @@ describe("/api", function() {
             expect(msg).to.equal("Page not found");
           });
       });
-      it("PATCH with invalid query responds with 400 and message 'Bad request'", () => {
-        return request
-          .patch(`/api/articles/${articleDocs[0]._id}?vote=blinky`)
-          .expect(400)
-          .then(({ body: { msg } }) => {
-            expect(msg).to.equal("Bad request");
-          });
-      });
     });
 
     describe("/:article_id/comments", () => {
@@ -217,8 +200,8 @@ describe("/api", function() {
         .send(newComment)
         .expect(201)
         .then(({ body }) => {
-          expect(body.created_by).to.equal(`${userDocs[0]._id}`);
-          expect(body.belongs_to).to.equal(`${articleDocs[0]._id}`);
+          expect(body.created_by._id).to.equal(`${userDocs[0]._id}`);
+          expect(body.belongs_to._id).to.equal(`${articleDocs[0]._id}`);
         });
     });
   });

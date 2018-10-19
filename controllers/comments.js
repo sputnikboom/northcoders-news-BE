@@ -37,7 +37,7 @@ const addNewComment = (req, res, next) => {
 
     newComment.save()
     .then(newCommentDoc => {
-      return Comment.findById(newCommentDoc._id).populate("created_by").populate("belongs_to")
+      return Comment.findById(newCommentDoc._id).populate("created_by").populate("belongs_to").lean()
     })
     .then(commentDoc => {
       res.status(201).send(commentDoc);
