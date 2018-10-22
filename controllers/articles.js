@@ -56,7 +56,6 @@ const getArticleById = (req, res, next) => {
 };
 
 const updateVote = (req, res, next) => {
-  
   const voteObj = (req.query.vote === "up") ? { votes: +1 } : { votes: -1 };
   return Article.findByIdAndUpdate(
     req.params.article_id,
@@ -81,6 +80,7 @@ const addNewArticle = (req, res, next) => {
   newArticle
     .save()
     .then(newArticleDoc => {
+      console.log(newArticleDoc, "!!!")
       return Article.findById(
         newArticleDoc._id
       ).lean().populate("created_by")

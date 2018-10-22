@@ -23,7 +23,7 @@ app.use('/*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    if(err.stats === 400 || err.name === "CastError") res.status(400).send({msg: 'Bad request'})
+    if(err.stats === 400 || err.name === "CastError" || err.name === "ValidationError") res.status(400).send({msg: 'Bad request'})
     else next(err);
 })
 

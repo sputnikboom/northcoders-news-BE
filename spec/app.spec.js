@@ -79,6 +79,15 @@ describe("/api", function() {
           expect(body.comment_count).to.equal(0);
         });
     });
+    it('POST responds with status 400 when given an invalid JSON article object', () => {
+      const newArticle  ={ beep: "boop"}
+      return request.post(`/api/topics/${topicDocs[0].slug}/articles`)
+      .send(newArticle)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).to.equal('Bad request');
+      })
+    })
   });
 
   describe("/articles", () => {
@@ -204,6 +213,17 @@ describe("/api", function() {
           expect(body.belongs_to._id).to.equal(`${articleDocs[0]._id}`);
         });
     });
+
+    it("POST responds with status 400 when given an invalid JSON comment object", () => {
+      const newComment = {beep: "boop"}
+      return request
+      .post(`/api/articles/${articleDocs[0]._id}/comments`)
+      .send(newComment)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).to.equal("Bad request")
+      })
+    })
   });
 
   describe("/users", () => {
