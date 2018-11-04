@@ -94,13 +94,13 @@ to host the api
 
 To set up the project for deployment, you'll need to:
 
-1. Add the URI for your mLab database to your config file. Keep note of this, as you'll need to add it as a config var if hosting on he
+1. Add the URI for your mLab database to your config file. Keep note of this, as you'll need to add it as a config var if hosting on heroku:
 
 ```
   production: {DB_URL: "mongodb://<db_username>:<db_password>@ds115543.mlab.com:15543/<db_name>"}
 ```
 
-2. Seed your database to mLab
+2. Seed your database to mLab:
 
 ```
 $ NODE_ENV=production node seed/seed.dev.js
